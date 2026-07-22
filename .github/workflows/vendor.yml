@@ -1,0 +1,39 @@
+name: Build Laravel Vendor
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Extract project
+        run: |
+          unzip alfaore-store.zip -d app
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Install Composer packages
+        working-directory: app
+        run: |
+          composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Create vendor zip
+        run: |
+          cd app
+          zip -r vendor.zip vendor
+
+      - name: Upload vendor
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendor-folder
+          path: app/vendor.zip

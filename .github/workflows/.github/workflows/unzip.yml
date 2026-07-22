@@ -1,0 +1,25 @@
+name: Extract Project ZIP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract ZIP
+        run: |
+          unzip alfaore-store.zip -d project
+
+      - name: Show files
+        run: |
+          ls -la project
+
+      - name: Upload extracted project
+        uses: actions/upload-artifact@v4
+        with:
+          name: alfaore-store-files
+          path: project

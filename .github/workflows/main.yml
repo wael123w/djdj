@@ -18,7 +18,6 @@ jobs:
       - name: Show extracted files
         run: |
           ls -la extracted
-          ls -la extracted/alfaore-store
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -27,15 +26,22 @@ jobs:
           tools: composer:v2
           extensions: mbstring, bcmath, ctype, fileinfo, openssl, pdo, pdo_mysql, tokenizer, xml
 
+      - name: Verify Composer
+        working-directory: extracted
+        run: |
+          php -v
+          composer --version
+          test -f composer.json
+
       - name: Install Composer dependencies
-        working-directory: extracted/alfaore-store
+        working-directory: extracted
         env:
           COMPOSER_ALLOW_SUPERUSER: 1
         run: |
           composer install --no-dev --optimize-autoloader --no-interaction
 
       - name: Create vendor ZIP
-        working-directory: extracted/alfaore-store
+        working-directory: extracted
         run: |
           zip -r vendor.zip vendor
 
@@ -43,4 +49,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vendor-folder
-          path: extracted/alfaore-store/vendor.zip
+          path: extracted/vendor.zip

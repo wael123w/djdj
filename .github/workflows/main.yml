@@ -26,6 +26,19 @@ jobs:
           tools: composer:v2
           extensions: mbstring, bcmath, ctype, fileinfo, openssl, pdo, pdo_mysql, tokenizer, xml
 
+      - name: Prepare Laravel
+        working-directory: extracted
+        run: |
+          mkdir -p bootstrap/cache
+          touch bootstrap/cache/.gitignore
+
+          mkdir -p storage/framework/cache
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          mkdir -p storage/logs
+
+          chmod -R 777 bootstrap storage
+
       - name: Verify Composer
         working-directory: extracted
         run: |
